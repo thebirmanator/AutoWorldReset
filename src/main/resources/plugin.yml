@@ -1,0 +1,6 @@
+main: me.thebirmanator.autoworldreset.AutoWorldReset
+name: AutoWorldReset
+version: 1.0
+author: TheBirmanator
+api-version: 1.14
+description: Simple auto reset plugin for specific Minecraft worlds
