@@ -1,0 +1,6 @@
+world_nether:
+  every: 7 DAYS
+  next-reset: 24-06-2019 08:00
+world_the_end:
+  every: 7 DAYS
+  next-reset: 24-06-2019 08:00

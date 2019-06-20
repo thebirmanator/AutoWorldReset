@@ -1,48 +1,92 @@
 package me.thebirmanator.autoworldreset;
 
+import com.onarandombox.MultiverseCore.MultiverseCore;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class AutoWorldReset extends JavaPlugin {
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private MultiverseCore mv;
+
     public void onEnable() {
+        mv = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
 
-        int resetDay = DayOfWeek.valueOf("TUESDAY").getValue();
+        saveDefaultConfig();
 
-        LocalTime resetTime = ZonedDateTime.parse("23:00", DateTimeFormatter.ofPattern("HH:mm")).toLocalTime();
+        getServer().getPluginManager().registerEvents(new WorldResetListener(this), this);
 
-        //getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "day of week: " + dayOfWeek + ", reset day: " + resetDay);
-        //getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "day of month: " + dayOfMonth);
+        Set<World> worlds = getResettingWorlds();
+        for(World world : worlds) {
+            // config info
+            ConfigurationSection worldSection = getConfig().getConfigurationSection(world.getName());
+            String stringTime = worldSection.getString("next-reset");
+            String stringInterval = worldSection.getString("every");
 
-        ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
-        LocalDateTime now = LocalDateTime.now();
-        LocalTime nowTime = now.toLocalTime();
-        int daysTillNext = 7 - Math.abs(now.getDayOfWeek().getValue() - resetDay);
-        if(daysTillNext == 7) { // is the day in the config
-            if(resetTime.compareTo(nowTime) < 0) { // time is before the time of reset
-                daysTillNext = 0;
+            // converting into useful stuff: reset time/date and time to wait in between
+            LocalDateTime resetTime = LocalDateTime.parse(stringTime, formatter);
+            int intervalAmount = Integer.parseInt(stringInterval.split(" ")[0]);
+            TimeUnit intervalUnits = TimeUnit.valueOf(stringInterval.split(" ")[1]);
+            long interval = intervalUnits.toSeconds(intervalAmount);
+
+            // calculating the time until the next reset
+            LocalDateTime now = LocalDateTime.now();
+            while(Duration.between(now, resetTime).isNegative()) {
+                resetTime = resetTime.plusSeconds(interval);
+                getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Oh no! It looks like I have passed the scheduled reset time! New reset time: " + resetTime.format(formatter));
+            }
+            long secondsTillReset = Duration.between(now, resetTime).getSeconds();
+
+            // scheduling the resets to run
+            ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
+            final LocalDateTime finalOldReset = resetTime;
+            schedule.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    // saving the new reset time
+                    LocalDateTime newResetTime = finalOldReset.plusSeconds(interval);
+                    String stringReset = newResetTime.format(formatter);
+                    worldSection.set("next-reset", stringReset);
+                    saveConfig();
+                    getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Starting reset! Next scheduled reset: " + stringReset);
+
+                    // call the reset event. The schedule is async, so this BukkitRunnable must make it sync
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            getServer().getPluginManager().callEvent(new WorldResetEvent(world));
+                        }
+                    }.runTask(AutoWorldReset.getPlugin(AutoWorldReset.class));
+                }
+            }, secondsTillReset, interval, TimeUnit.SECONDS);
+
+        }
+    }
+
+    private Set<World> getResettingWorlds() {
+        Set<World> resetWorlds = new HashSet<>();
+        Set<String> worldNames = getConfig().getKeys(false);
+        for(String worldName : worldNames) {
+            World world = getServer().getWorld(worldName);
+            if(world != null) {
+                resetWorlds.add(world);
             }
         }
-        // set the day to today, then add how many days until the next reset
-        LocalDateTime resetDateTime = resetTime.atDate(now.toLocalDate());
-        resetDateTime = resetDateTime.plusDays(daysTillNext);
+        return resetWorlds;
+    }
 
-        long delay = Duration.between(now, resetDateTime).getSeconds();
-        getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "seconds delay: " + delay);
-
-        // long delay, long period, TimeUnit time unit
-        long daysInSeconds = TimeUnit.DAYS.toSeconds(7);
-        schedule.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                getServer().getConsoleSender().sendMessage("hey i ran the scheduled task!");
-            }
-        }, delay, daysInSeconds, TimeUnit.SECONDS);
+    public MultiverseCore getMVPlugin() {
+        return mv;
     }
 }

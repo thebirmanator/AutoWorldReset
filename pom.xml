@@ -24,6 +24,22 @@
             <version>1.14.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Multiverse -->
+        <dependency>
+            <artifactId>...</artifactId>
+            <groupId>...</groupId>
+            <version>...</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/Birman/Google Drive/Minecraft Jar Build Paths/Multiverse-Core-2.5.0.jar</systemPath>
+        </dependency>
+        <!-- WorldBorder -->
+        <dependency>
+            <artifactId>..</artifactId>
+            <groupId>..</groupId>
+            <version>..</version>
+            <scope>system</scope>
+            <systemPath>C:/Users/Birman/Google Drive/Minecraft Jar Build Paths/WorldBorder.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
