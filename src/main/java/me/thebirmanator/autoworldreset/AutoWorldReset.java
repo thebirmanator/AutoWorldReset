@@ -26,7 +26,7 @@ public class AutoWorldReset extends JavaPlugin {
         saveDefaultConfig();
 
         getServer().getPluginManager().registerEvents(new WorldResetListener(this), this);
-        getServer().getPluginManager().registerEvents(new FillTaskFinishListener(), this);
+        getServer().getPluginManager().registerEvents(new FillTaskFinishListener(this), this);
 
         Set<World> worlds = getResettingWorlds();
         for(World world : worlds) {
