@@ -1,6 +1,22 @@
 world_nether:
   every: 7 DAYS
   next-reset: 24-06-2019 08:00
+  before-fill-run:
+  - lp group default permission unset multiverse.access.world_nether
+  - mvregen world_nether
+  fill-cmds:
+  - wb world_nether fill
+  - wb fill confirm
+  after-fill-run:
+  - lp group default permission set multiverse.access.world_nether
 world_the_end:
   every: 7 DAYS
   next-reset: 24-06-2019 08:00
+  before-fill-run:
+  - lp group default permission unset multiverse.access.world_the_end
+  - mvregen world_the_end
+  fill-cmds:
+  - wb world_the_end fill
+  - wb fill confirm
+  after-fill-run:
+  - lp group default permission set multiverse.access.world_the_end

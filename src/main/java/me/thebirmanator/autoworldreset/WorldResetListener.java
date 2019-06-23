@@ -1,11 +1,14 @@
 package me.thebirmanator.autoworldreset;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.wimbli.WorldBorder.Config;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
+import java.util.List;
 
 public class WorldResetListener implements Listener {
     private AutoWorldReset main;
@@ -18,22 +21,20 @@ public class WorldResetListener implements Listener {
     public void onReset(WorldResetEvent event) {
         // send players to main world
         for(Player player : Bukkit.getOnlinePlayers()) {
-            main.getServer().getConsoleSender().sendMessage("sending people to spawn");
+            player.sendTitle(ChatColor.DARK_PURPLE + "World Reset", ChatColor.LIGHT_PURPLE + event.getWorld().getName(), 20, 40, 20);
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("We'll let you know when it's back up!").create());
             if(player.getWorld().equals(event.getWorld())) {
                 player.teleport(main.getServer().getWorld("world").getSpawnLocation());
             }
         }
 
-        // take away permission to enter this world
-        main.getServer().dispatchCommand(Bukkit.getConsoleSender(), "lp group default permission unset multiverse.access." + event.getWorld().getName());
+        // get commands before fill
+        List<String> cmds = main.getConfig().getStringList(event.getWorld().getName() + ".before-fill-run");
+        // append the fill command to the end of commands to run
+        cmds.addAll(main.getConfig().getStringList(event.getWorld().getName() + ".fill-cmds"));
 
-        MultiverseCore mv = main.getMVPlugin();
-
-        // regenerating the world
-        mv.regenWorld(event.getWorld().getName(), true, true, null);
-
-        // start chunk regen
-        // TODO: find out what this actually means
-        Config.RestoreFillTask(event.getWorld().getName(), 200, 20,20, 20, 20, 20, 20);
+        for(String cmd : cmds) {
+            main.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
+        }
     }
 }

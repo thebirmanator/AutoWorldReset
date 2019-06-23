@@ -26,6 +26,7 @@ public class AutoWorldReset extends JavaPlugin {
         saveDefaultConfig();
 
         getServer().getPluginManager().registerEvents(new WorldResetListener(this), this);
+        getServer().getPluginManager().registerEvents(new FillTaskFinishListener(), this);
 
         Set<World> worlds = getResettingWorlds();
         for(World world : worlds) {
@@ -44,9 +45,10 @@ public class AutoWorldReset extends JavaPlugin {
             LocalDateTime now = LocalDateTime.now();
             while(Duration.between(now, resetTime).isNegative()) {
                 resetTime = resetTime.plusSeconds(interval);
-                getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Oh no! It looks like I have passed the scheduled reset time! New reset time: " + resetTime.format(formatter));
+                getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Oh no! It looks like I have passed the scheduled reset time for " + ChatColor.GRAY + world.getName() + ChatColor.LIGHT_PURPLE + "! New reset time: " + resetTime.format(formatter));
             }
             long secondsTillReset = Duration.between(now, resetTime).getSeconds();
+            getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Next reset scheduled for " + ChatColor.GRAY + world.getName() + ChatColor.LIGHT_PURPLE + ": " + resetTime.format(formatter));
 
             // scheduling the resets to run
             ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
@@ -59,7 +61,7 @@ public class AutoWorldReset extends JavaPlugin {
                     String stringReset = newResetTime.format(formatter);
                     worldSection.set("next-reset", stringReset);
                     saveConfig();
-                    getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Starting reset! Next scheduled reset: " + stringReset);
+                    getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Starting reset for " + ChatColor.GRAY + world.getName() + ChatColor.LIGHT_PURPLE + "! Next scheduled reset: " + stringReset);
 
                     // call the reset event. The schedule is async, so this BukkitRunnable must make it sync
                     new BukkitRunnable() {
