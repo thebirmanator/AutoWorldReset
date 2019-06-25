@@ -1,6 +1,7 @@
 package me.thebirmanator.autoworldreset;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.wimbli.WorldBorder.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -49,6 +50,11 @@ public class AutoWorldReset extends JavaPlugin {
             }
             long secondsTillReset = Duration.between(now, resetTime).getSeconds();
             getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Next reset scheduled for " + ChatColor.GRAY + world.getName() + ChatColor.LIGHT_PURPLE + ": " + resetTime.format(formatter));
+
+            // save the reset time to config
+            String stringReset = resetTime.format(formatter);
+            worldSection.set("next-reset", stringReset);
+            saveConfig();
 
             // scheduling the resets to run
             ScheduledExecutorService schedule = Executors.newScheduledThreadPool(1);
