@@ -14,6 +14,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>enginehub-maven</id>
+            <url>http://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -39,6 +43,12 @@
             <version>..</version>
             <scope>system</scope>
             <systemPath>C:/Users/Birman/Google Drive/Minecraft Jar Build Paths/WorldBorder.jar</systemPath>
+        </dependency>
+        <!-- WorldEdit -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

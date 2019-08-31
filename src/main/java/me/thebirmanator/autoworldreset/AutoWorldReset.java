@@ -1,7 +1,6 @@
 package me.thebirmanator.autoworldreset;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
-import com.wimbli.WorldBorder.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;

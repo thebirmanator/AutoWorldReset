@@ -9,6 +9,11 @@ world_nether:
   - wb fill confirm
   after-fill-run:
   - lp group default permission set multiverse.access.world_nether
+  paste-schematics:
+    nether-spawn:
+      x: 0
+      y: 72
+      z: 0
 world_the_end:
   every: 7 DAYS
   next-reset: 24-06-2019 08:00
