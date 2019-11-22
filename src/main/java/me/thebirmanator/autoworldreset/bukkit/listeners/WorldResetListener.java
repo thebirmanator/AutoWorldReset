@@ -1,9 +1,10 @@
-package me.thebirmanator.autoworldreset;
+package me.thebirmanator.autoworldreset.bukkit.listeners;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+import me.thebirmanator.autoworldreset.bukkit.AutoWorldReset;
+import me.thebirmanator.autoworldreset.bukkit.WorldResetEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,19 +13,19 @@ import java.util.List;
 
 public class WorldResetListener implements Listener {
     private AutoWorldReset main;
-
     public WorldResetListener(AutoWorldReset main) {
         this.main = main;
     }
 
     @EventHandler
     public void onReset(WorldResetEvent event) {
+        // send plugin message to bungee saying that a world is resetting
+        AutoWorldReset.getInstance().sendData("startReset", event.getWorld().getName());
+
         // send players to main world
         for(Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(ChatColor.DARK_PURPLE + "World Reset", ChatColor.LIGHT_PURPLE + event.getWorld().getName(), 20, 40, 20);
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("We'll let you know when it's back up!").create());
             if(player.getWorld().equals(event.getWorld())) {
-                player.teleport(main.getServer().getWorld("world").getSpawnLocation());
+                player.performCommand("spawn");
             }
         }
 

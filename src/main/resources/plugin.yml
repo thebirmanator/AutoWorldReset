@@ -1,4 +1,4 @@
-main: me.thebirmanator.autoworldreset.AutoWorldReset
+main: me.thebirmanator.autoworldreset.bukkit.AutoWorldReset
 name: AutoWorldReset
 version: 1.1
 author: TheBirmanator

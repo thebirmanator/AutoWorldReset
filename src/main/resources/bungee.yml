@@ -1,0 +1,5 @@
+main: me.thebirmanator.autoworldreset.bungee.AutoWorldReset
+name: AutoWorldReset
+version: 1.0
+author: TheBirmanator
+description: Simple auto reset plugin for specific Minecraft worlds

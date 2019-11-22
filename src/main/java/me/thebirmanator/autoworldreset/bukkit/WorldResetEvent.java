@@ -1,4 +1,4 @@
-package me.thebirmanator.autoworldreset;
+package me.thebirmanator.autoworldreset.bukkit;
 
 import org.bukkit.World;
 import org.bukkit.event.Event;

@@ -1,6 +1,11 @@
-package me.thebirmanator.autoworldreset;
+package me.thebirmanator.autoworldreset.bukkit;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import me.thebirmanator.autoworldreset.bukkit.listeners.FillTaskFinishListener;
+import me.thebirmanator.autoworldreset.bukkit.listeners.WorldResetListener;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,10 +25,15 @@ public class AutoWorldReset extends JavaPlugin {
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private MultiverseCore mv;
 
+    private static AutoWorldReset instance;
+
     public void onEnable() {
+        instance = this;
         mv = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
 
         saveDefaultConfig();
+
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         getServer().getPluginManager().registerEvents(new WorldResetListener(this), this);
         getServer().getPluginManager().registerEvents(new FillTaskFinishListener(this), this);
@@ -95,5 +105,18 @@ public class AutoWorldReset extends JavaPlugin {
 
     public MultiverseCore getMVPlugin() {
         return mv;
+    }
+
+    public void sendData(String channel, String worldName) {
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        // the channel
+        output.writeUTF(channel);
+        // which world is affected
+        output.writeUTF(worldName);
+        getServer().sendPluginMessage(this, "BungeeCord", output.toByteArray());
+    }
+
+    public static AutoWorldReset getInstance() {
+        return instance;
     }
 }

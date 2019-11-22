@@ -1,4 +1,4 @@
-package me.thebirmanator.autoworldreset;
+package me.thebirmanator.autoworldreset.bukkit.listeners;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
@@ -16,6 +16,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import com.wimbli.WorldBorder.BorderData;
 import com.wimbli.WorldBorder.Config;
 import com.wimbli.WorldBorder.Events.WorldBorderFillFinishedEvent;
+import me.thebirmanator.autoworldreset.bukkit.AutoWorldReset;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.*;
@@ -38,10 +39,9 @@ public class FillTaskFinishListener implements Listener {
     @EventHandler
     public void onFinish(WorldBorderFillFinishedEvent event) {
         World world = event.getWorld();
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(ChatColor.DARK_PURPLE + "Reset Complete!", ChatColor.LIGHT_PURPLE + world.getName(), 20, 40, 20);
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("You may now go back into the world!").create());
-        }
+        // send message to Bungee that world has finished generating
+        //TODO: make it the titles when there's no player on the server?
+        AutoWorldReset.getInstance().sendData("endReset", world.getName());
 
         // set the vanilla world border
         BorderData pluginBorder = Config.getBorders().get(event.getWorld().getName());
