@@ -34,7 +34,7 @@ public class PluginMessageReceiverListener implements Listener {
             String actionBar = "";
             if(subChannel.equalsIgnoreCase("startReset")) {
                 title.title(new TextComponent(ChatColor.DARK_PURPLE + "World Reset"));
-                actionBar = "We'll let you know when it's back up!";
+                actionBar = "You will be able to join it within an hour or two.";
             } else if(subChannel.equalsIgnoreCase("endReset")) {
                 title.title(new TextComponent(ChatColor.DARK_PURPLE + "Reset Complete!"));
                 actionBar = "You may now go back into the world!";
