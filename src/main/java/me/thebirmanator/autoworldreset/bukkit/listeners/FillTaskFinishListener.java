@@ -40,7 +40,6 @@ public class FillTaskFinishListener implements Listener {
     public void onFinish(WorldBorderFillFinishedEvent event) {
         World world = event.getWorld();
         // send message to Bungee that world has finished generating
-        //TODO: make it the titles when there's no player on the server?
         AutoWorldReset.getInstance().sendData("endReset", world.getName());
 
         // set the vanilla world border

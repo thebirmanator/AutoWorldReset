@@ -24,6 +24,7 @@ public class AutoWorldReset extends JavaPlugin {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private MultiverseCore mv;
+    private ForceResetCmd forceResetCmd = new ForceResetCmd();
 
     private static AutoWorldReset instance;
 
@@ -32,6 +33,8 @@ public class AutoWorldReset extends JavaPlugin {
         mv = (MultiverseCore) getServer().getPluginManager().getPlugin("Multiverse-Core");
 
         saveDefaultConfig();
+
+        getCommand(forceResetCmd.forcereset).setExecutor(forceResetCmd);
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -91,7 +94,7 @@ public class AutoWorldReset extends JavaPlugin {
         }
     }
 
-    private Set<World> getResettingWorlds() {
+    public Set<World> getResettingWorlds() {
         Set<World> resetWorlds = new HashSet<>();
         Set<String> worldNames = getConfig().getKeys(false);
         for(String worldName : worldNames) {
