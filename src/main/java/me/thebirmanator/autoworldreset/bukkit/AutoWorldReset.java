@@ -3,12 +3,14 @@ package me.thebirmanator.autoworldreset.bukkit;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.onarandombox.MultiverseCore.MultiverseCore;
+import me.thebirmanator.autoworldreset.bukkit.events.WorldResetEvent;
 import me.thebirmanator.autoworldreset.bukkit.listeners.FillTaskFinishListener;
+import me.thebirmanator.autoworldreset.bukkit.listeners.WorldFinishResetListener;
 import me.thebirmanator.autoworldreset.bukkit.listeners.WorldResetListener;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -39,7 +41,11 @@ public class AutoWorldReset extends JavaPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         getServer().getPluginManager().registerEvents(new WorldResetListener(this), this);
-        getServer().getPluginManager().registerEvents(new FillTaskFinishListener(this), this);
+        getServer().getPluginManager().registerEvents(new WorldFinishResetListener(), this);
+        Plugin worldBorder = getServer().getPluginManager().getPlugin("WorldBorder");
+        if (worldBorder != null && worldBorder.isEnabled()) {
+            getServer().getPluginManager().registerEvents(new FillTaskFinishListener(this), this);
+        }
 
         Set<World> worlds = getResettingWorlds();
         for(World world : worlds) {

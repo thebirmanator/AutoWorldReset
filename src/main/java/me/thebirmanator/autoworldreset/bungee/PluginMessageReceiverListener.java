@@ -25,21 +25,21 @@ public class PluginMessageReceiverListener implements Listener {
 
     @EventHandler
     public void onReceive(PluginMessageEvent event) {
-        if(event.getTag().equalsIgnoreCase("BungeeCord")) {
+        if (event.getTag().equalsIgnoreCase("BungeeCord")) {
             ByteArrayDataInput input = ByteStreams.newDataInput(event.getData());
             String subChannel = input.readUTF();
-            if(!(subChannel.equalsIgnoreCase("startReset") || subChannel.equalsIgnoreCase("endReset"))) return;
+            if (!(subChannel.equalsIgnoreCase("startReset") || subChannel.equalsIgnoreCase("endReset"))) return;
             String world = input.readUTF();
             title.subTitle(new TextComponent(ChatColor.LIGHT_PURPLE + world));
             String actionBar = "";
-            if(subChannel.equalsIgnoreCase("startReset")) {
+            if (subChannel.equalsIgnoreCase("startReset")) {
                 title.title(new TextComponent(ChatColor.DARK_PURPLE + "World Reset"));
                 actionBar = "You will be able to join it within an hour or two.";
-            } else if(subChannel.equalsIgnoreCase("endReset")) {
+            } else if (subChannel.equalsIgnoreCase("endReset")) {
                 title.title(new TextComponent(ChatColor.DARK_PURPLE + "Reset Complete!"));
                 actionBar = "You may now go back into the world!";
             }
-            for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+            for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
                 player.sendTitle(title);
                 player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBar));
             }

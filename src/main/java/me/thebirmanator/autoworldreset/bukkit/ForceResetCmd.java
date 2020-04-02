@@ -1,5 +1,6 @@
 package me.thebirmanator.autoworldreset.bukkit;
 
+import me.thebirmanator.autoworldreset.bukkit.events.WorldResetEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

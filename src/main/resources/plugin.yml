@@ -1,10 +1,11 @@
 main: me.thebirmanator.autoworldreset.bukkit.AutoWorldReset
 name: AutoWorldReset
-version: 1.1
+version: 1.2
 author: TheBirmanator
 api-version: 1.14
 description: Simple auto reset plugin for specific Minecraft worlds
-depend: [Multiverse-Core, WorldBorder, WorldEdit]
+depend: [Multiverse-Core, WorldEdit]
+softdepend: [WorldBorder]
 commands:
   forcereset:
     usage: /<command>
