@@ -7,6 +7,7 @@ public class AutoWorldReset extends Plugin {
     private static AutoWorldReset instance;
 
     public void onEnable() {
+        // this is a revert test
         instance = this;
         getProxy().registerChannel("BungeeCord");
         getProxy().getPluginManager().registerListener(this, new PluginMessageReceiverListener());
