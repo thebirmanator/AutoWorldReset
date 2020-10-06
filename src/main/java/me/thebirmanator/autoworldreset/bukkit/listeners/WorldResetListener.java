@@ -16,6 +16,7 @@ import java.util.List;
 
 public class WorldResetListener implements Listener {
     private AutoWorldReset main;
+
     public WorldResetListener(AutoWorldReset main) {
         this.main = main;
     }

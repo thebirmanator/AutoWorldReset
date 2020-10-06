@@ -2,13 +2,13 @@ nether:
   every: 30 DAYS
   next-reset: 01-05-2020 09:00
   before-fill-run:
-  - lp group default permission unset multiverse.access.nether
-  - mvregen nether
+    - lp group default permission unset multiverse.access.nether
+    - mvregen nether
   fill-cmds:
-  - wb nether fill
-  - wb fill confirm
+    - wb nether fill
+    - wb fill confirm
   after-fill-run:
-  - lp group default permission set multiverse.access.nether
+    - lp group default permission set multiverse.access.nether
   paste-schematics:
     nether_spawn:
       x: -44
@@ -18,10 +18,10 @@ world_the_end:
   every: 7 DAYS
   next-reset: 01-05-2020 09:00
   before-fill-run:
-  - lp group default permission unset multiverse.access.world_the_end
-  - mvregen world_the_end
+    - lp group default permission unset multiverse.access.world_the_end
+    - mvregen world_the_end
   fill-cmds:
-  - wb world_the_end fill
-  - wb fill confirm
+    - wb world_the_end fill
+    - wb fill confirm
   after-fill-run:
-  - lp group default permission set multiverse.access.world_the_end
+    - lp group default permission set multiverse.access.world_the_end

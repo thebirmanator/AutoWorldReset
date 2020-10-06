@@ -14,7 +14,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.time.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +49,7 @@ public class AutoWorldReset extends JavaPlugin {
         }
 
         Set<World> worlds = getResettingWorlds();
-        for(World world : worlds) {
+        for (World world : worlds) {
             // config info
             ConfigurationSection worldSection = getConfig().getConfigurationSection(world.getName());
             String stringTime = worldSection.getString("next-reset");
@@ -62,7 +63,7 @@ public class AutoWorldReset extends JavaPlugin {
 
             // calculating the time until the next reset
             LocalDateTime now = LocalDateTime.now();
-            while(Duration.between(now, resetTime).isNegative()) {
+            while (Duration.between(now, resetTime).isNegative()) {
                 resetTime = resetTime.plusSeconds(interval);
                 getServer().getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "Oh no! It looks like I have passed the scheduled reset time for " + ChatColor.GRAY + world.getName() + ChatColor.LIGHT_PURPLE + "! New reset time: " + resetTime.format(formatter));
             }
@@ -103,9 +104,9 @@ public class AutoWorldReset extends JavaPlugin {
     public Set<World> getResettingWorlds() {
         Set<World> resetWorlds = new HashSet<>();
         Set<String> worldNames = getConfig().getKeys(false);
-        for(String worldName : worldNames) {
+        for (String worldName : worldNames) {
             World world = getServer().getWorld(worldName);
-            if(world != null) {
+            if (world != null) {
                 resetWorlds.add(world);
             }
         }
