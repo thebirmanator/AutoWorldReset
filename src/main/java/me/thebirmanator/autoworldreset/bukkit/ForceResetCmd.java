@@ -14,10 +14,10 @@ public class ForceResetCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender.hasPermission("autoworldreset.forcereset")) {
-            if(args.length > 0) {
+        if (sender.hasPermission("autoworldreset.forcereset")) {
+            if (args.length > 0) {
                 World world = Bukkit.getWorld(args[0]);
-                if(world != null && AutoWorldReset.getInstance().getResettingWorlds().contains(world)) {
+                if (world != null && AutoWorldReset.getInstance().getResettingWorlds().contains(world)) {
                     Bukkit.getServer().getPluginManager().callEvent(new WorldResetEvent(world));
                     sender.sendMessage(ChatColor.GREEN + "Forcing world " + args[0] + " to reset!");
                 } else {

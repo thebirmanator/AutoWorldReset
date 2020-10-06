@@ -4,8 +4,8 @@ version: 1.2
 author: TheBirmanator
 api-version: 1.14
 description: Simple auto reset plugin for specific Minecraft worlds
-depend: [Multiverse-Core, WorldEdit]
-softdepend: [WorldBorder]
+depend: [ Multiverse-Core, WorldEdit ]
+softdepend: [ WorldBorder ]
 commands:
   forcereset:
     usage: /<command>
